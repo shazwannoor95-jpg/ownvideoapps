@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ms"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'">
+<title>OwnVideo Apps — Portable</title><link rel="stylesheet" href="style.css"></head>
+<body><main>
+<header><span class="badge">WINDOWS PORTABLE</span><h1>OwnVideo Apps</h1><p>Dari bahan anda ke video Bahasa Melayu dengan narasi Ludo.</p></header>
+<section class="panel"><h2>1. Sediakan projek</h2><label for="title">Tajuk video</label>
+<div class="row"><input id="title" maxlength="200" placeholder="Contoh: Panduan Pengurusan Rekod"><button id="create">Import bahan &amp; cipta projek</button></div>
+<p class="hint">TXT, Markdown, PDF berteks, DOCX atau PPTX. Teks disusun menjadi draf babak; semak dan sunting sebelum menjana suara. PDF imbasan memerlukan OCR dahulu.</p>
+<div class="row"><button id="choose">Buka projek sedia ada</button><button id="folder">Buka folder projek / Data</button></div></section>
+<section class="panel"><h2>2. Semak storyboard</h2><h3 id="project">Belum ada projek dipilih</h3><p id="location" class="hint"></p>
+<section id="scripts"></section><button id="save" disabled>Simpan suntingan</button></section>
+<section class="panel"><h2>3. Jana narasi Ludo</h2><p>Log masuk Google sendiri dalam tetingkap AI Studio. Penjanaan memerlukan internet dan kuota Google.</p>
+<div class="row"><button id="open">Buka / login Google AI Studio</button><button id="check">Semak editor</button>
+<button id="generate" disabled>Luluskan skrip &amp; jana WAV Ludo</button><button id="cancel">Hentikan penjanaan Ludo</button></div>
+<p class="hint">Simpan suntingan dahulu. Hanya narasi dihantar selepas kelulusan. WAV sedia ada tidak ditimpa. Jika login aplikasi disekat Google, jana WAV dalam pelayar biasa dan letakkan dalam audio/sXX.wav.</p></section>
+<section class="panel"><h2>4. Eksport video</h2><p>Dengar setiap WAV dan isi cap masa sari kata sebenar pada babak di atas. Tekan Muat semula selepas menjana atau memasukkan WAV secara manual.</p>
+<div class="row"><button id="reload" disabled>Muat semula babak</button><button id="render" class="primary" disabled>Render MP4 + sari kata</button></div>
+<p class="hint">Output H.264/AAC 720p, muzik instrumental dan SRT. Semakan teknikal tidak menggantikan semakan fakta, sebutan atau kelulusan manusia.</p></section>
+<aside><strong>Status</strong><pre id="status" role="status" aria-live="polite">Sedia. Projek dan hasil disimpan setempat dalam folder Data di sebelah aplikasi.</pre></aside>
+<footer>Projek setempat · Narasi sintetik Ludo · Tiada upload video automatik</footer>
+</main><script src="ui.js"></script></body></html>

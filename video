@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+repo="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -x "$repo/.venv/bin/python" ]]; then
+  exec "$repo/.venv/bin/python" "$repo/tools/video.py" "$@"
+fi
+exec python3 "$repo/tools/video.py" "$@"

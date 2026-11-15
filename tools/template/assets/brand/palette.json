@@ -1,0 +1,29 @@
+{
+  "name": "UiTM official digital-logo sampled palette",
+  "verified_date": "2026-10-30",
+  "method": "Exact dominant opaque RGB pixel values from the official PNG; not represented as a published universal HEX specification.",
+  "logo_source": "https://nsembilan.uitm.edu.my/images/Muatturun/korporat_video_template/LogoUiTM.png",
+  "logo_file": "LogoUiTM.png",
+  "colors": {
+    "blue": "#042E6F",
+    "purple": "#92278F",
+    "yellow": "#FEBE10",
+    "grey": "#525355",
+    "white": "#FFFFFF",
+    "arabic_lettering_purple_preserve_in_logo": "#8D3594"
+  },
+  "published_print_reference": {
+    "source": "https://medicine.uitm.edu.my/images/OFFICE/Corporate/download/1.logo/Logo_Usage_Infographic.pdf",
+    "blue": {"pantone": "655 C", "cmyk": [100, 80, 0, 40]},
+    "purple": {"pantone": "254 C", "cmyk": [50, 100, 0, 0]},
+    "yellow": {"pantone": "130 C", "cmyk": [0, 30, 100, 0]},
+    "grey": {"cmyk": [0, 0, 0, 70]}
+  },
+  "contrast_ratios": {
+    "white_on_blue": 12.92,
+    "white_on_purple": 7.22,
+    "blue_on_yellow": 7.74,
+    "grey_on_white": 7.70
+  },
+  "logo_handling": "Use full original logo without recolouring, cropping or distortion, preserve aspect ratio and use a white/light panel for this grey-lettering variant."
+}

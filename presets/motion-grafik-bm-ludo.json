@@ -1,0 +1,35 @@
+{
+  "name": "motion-grafik-bm-ludo",
+  "kind": "production-brief",
+  "renderer_applies_automatically": false,
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "aspect_ratio": "16:9",
+    "codec": "h264",
+    "background": "white"
+  },
+  "audio": {
+    "provider": "Google AI Studio",
+    "voice": "Ludo",
+    "codec": "aac",
+    "fallback_allowed": false
+  },
+  "style": "Baca dalam Bahasa Melayu Malaysia baku. Gunakan nada narator latihan korporat yang jelas, tenang dan yakin. Ikut skrip dengan tepat. Beri jeda natural dan sebut akronim, nama serta kod mengikut bentuk sebutan yang ditulis.",
+  "captions": {
+    "language": "ms-MY",
+    "visible_in_video": true,
+    "export_srt": true
+  },
+  "branding": {
+    "logo_position": "top-right",
+    "condition": "For UiTM projects only, when UiTM and 7 Dekad assets are supplied"
+  },
+  "duration": "measured from verified narration",
+  "limitations": [
+    "Current renderer is 1280x720/30fps; this brief does not change its resolution.",
+    "Current captions are optional MP4 text tracks; burned-in captions require a separate production step.",
+    "Supplied WAV origin must be verified in Google AI Studio; files alone cannot identify the voice."
+  ]
+}

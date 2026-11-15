@@ -1,0 +1,3 @@
+# Imported artwork/provenance/licence bytes are retained as supplied.
+tools/template/assets/** -whitespace
+tools/template/local_resources/OFL.txt -whitespace

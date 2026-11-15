@@ -1,0 +1,63 @@
+{
+  "assets": [
+    {
+      "id": "SV0102",
+      "source": "C:\\Users\\User\\.codex\\skills\\buat-video-motion-grafik\\assets\\svg_elements\\files\\SV0102.svg",
+      "source_sha256": "09d6f51687ed8b7fa1074d2dd65653570acdaf3dd820dd2ad3cc0d2aa0433277",
+      "project_svg": "assets/icons/SV0102.svg",
+      "project_png": "assets/icons/SV0102.png",
+      "modification": "Palette recoloured for UiTM-based corporate explainer; original geometry retained."
+    },
+    {
+      "id": "SV0104",
+      "source": "C:\\Users\\User\\.codex\\skills\\buat-video-motion-grafik\\assets\\svg_elements\\files\\SV0104.svg",
+      "source_sha256": "a05ee7c53bd5c8cf73e7af320c375f586fa8c19028f16d84b9d6716152866517",
+      "project_svg": "assets/icons/SV0104.svg",
+      "project_png": "assets/icons/SV0104.png",
+      "modification": "Palette recoloured for UiTM-based corporate explainer; original geometry retained."
+    },
+    {
+      "id": "SV0105",
+      "source": "C:\\Users\\User\\.codex\\skills\\buat-video-motion-grafik\\assets\\svg_elements\\files\\SV0105.svg",
+      "source_sha256": "918a55cb02d6433fd8cbc7152c72af460ed63d337f040cad0f880d7007c59fa1",
+      "project_svg": "assets/icons/SV0105.svg",
+      "project_png": "assets/icons/SV0105.png",
+      "modification": "Palette recoloured for UiTM-based corporate explainer; original geometry retained."
+    },
+    {
+      "id": "SV0108",
+      "source": "C:\\Users\\User\\.codex\\skills\\buat-video-motion-grafik\\assets\\svg_elements\\files\\SV0108.svg",
+      "source_sha256": "8968d8ab23322c8553eb3f4b136bc74bc341e6ed10174c79cf6123569f47bb81",
+      "project_svg": "assets/icons/SV0108.svg",
+      "project_png": "assets/icons/SV0108.png",
+      "modification": "Palette recoloured for UiTM-based corporate explainer; original geometry retained."
+    },
+    {
+      "id": "SV0341",
+      "source": "C:\\Users\\User\\.codex\\skills\\buat-video-motion-grafik\\assets\\svg_elements\\files\\SV0341.svg",
+      "source_sha256": "042dd4c216bd5326637f56c93d79aab456ef6ac2a33acdf05b40d97778658efe",
+      "project_svg": "assets/icons/SV0341.svg",
+      "project_png": "assets/icons/SV0341.png",
+      "modification": "Palette recoloured for UiTM-based corporate explainer; original geometry retained."
+    },
+    {
+      "id": "SV1101",
+      "source": "C:\\Users\\User\\.codex\\skills\\buat-video-motion-grafik\\assets\\svg_elements\\files\\SV1101.svg",
+      "source_sha256": "70e3e7dde911396ed782db3f945b8eaba795256462cbee9772c0b67582c95453",
+      "project_svg": "assets/icons/SV1101.svg",
+      "project_png": "assets/icons/SV1101.png",
+      "modification": "Palette recoloured for UiTM-based corporate explainer; original geometry retained."
+    }
+  ],
+  "palette_replacements": {
+    "#29465B": "#042E6F",
+    "#A7DFC8": "#CBD9F0",
+    "#B7D7F0": "#CBD9F0",
+    "#C8B7E8": "#DCC7E1",
+    "#F6CF7B": "#FEBE10",
+    "#F8FAFF": "#FFFFFF",
+    "#F0B7C0": "#DCC7E1",
+    "#A7DAD8": "#DCC7E1",
+    "#F3D9B0": "#FFE9A8"
+  }
+}

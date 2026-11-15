@@ -1,0 +1,37 @@
+name: Windows portable
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Build ZIP
+        run: python tools/build_portable.py
+      - name: Node unit tests
+        shell: powershell
+        run: |
+          $env:PATH = (Join-Path $pwd 'dist\OwnVideoApps-Portable\resources\runtime\bin') + ';' + $env:PATH
+          node --test desktop/tests/*.test.cjs
+      - name: Test bundled Windows runtime and MP4 export
+        shell: powershell
+        run: '& .\dist\OwnVideoApps-Portable\Semak-Portable.ps1'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: OwnVideoApps-Windows-x64
+          path: |
+            dist/OwnVideoApps-Windows-x64.zip
+            dist/OwnVideoApps-Windows-x64.zip.sha256
+          if-no-files-found: error
+          retention-days: 30
