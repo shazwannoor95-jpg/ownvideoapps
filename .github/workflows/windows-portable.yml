@@ -26,7 +26,17 @@ jobs:
           node --test desktop/tests/*.test.cjs
       - name: Test bundled Windows runtime and MP4 export
         shell: powershell
-        run: '& .\dist\OwnVideoApps-Portable\Semak-Portable.ps1'
+        run: |
+          try {
+            & .\dist\OwnVideoApps-Portable\Semak-Portable.ps1 *>&1 | Tee-Object -FilePath smoke.log
+          } catch {
+            $detail = ($_ | Out-String)
+            if (Test-Path smoke.log) { $detail += (Get-Content smoke.log -Tail 55 | Out-String) }
+            if ($detail.Length -gt 9000) { $detail = $detail.Substring($detail.Length - 9000) }
+            $detail = $detail.Replace('%', '%25').Replace("`r", '%0D').Replace("`n", '%0A')
+            Write-Output "::error title=Windows portable smoke details::$detail"
+            throw
+          }
       - uses: actions/upload-artifact@v4
         with:
           name: OwnVideoApps-Windows-x64

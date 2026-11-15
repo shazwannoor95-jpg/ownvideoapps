@@ -8,7 +8,7 @@ $env:PYTHONDONTWRITEBYTECODE = '1'
 Write-Host 'Close other OwnVideo Apps windows before running this check.'
 $manifest = Get-Content (Join-Path $base 'SHA256SUMS.json') -Raw | ConvertFrom-Json
 foreach ($entry in $manifest.PSObject.Properties) {
-    $actual = (Get-FileHash (Join-Path $base $entry.Name) -Algorithm SHA256).Hash.ToLowerInvariant()
+    $actual = (Get-FileHash -LiteralPath (Join-Path $base $entry.Name) -Algorithm SHA256).Hash.ToLowerInvariant()
     if ($actual -ne $entry.Value) { throw "SHA256 mismatch: $($entry.Name)" }
 }
 $report = Join-Path $base 'Data\portable-smoke.json'
@@ -22,7 +22,7 @@ if (-not (Test-Path $report)) { throw 'Packaged EXE did not produce a dashboard 
 $dashboard = Get-Content $report -Raw | ConvertFrom-Json
 if (-not $dashboard.passed -or -not $dashboard.packaged) { throw 'Packaged dashboard check failed' }
 Remove-Item $report
-& $python -c 'import sys, numpy, scipy, PIL, pypdf; print(sys.version); print("PYTHON_PACKAGES_OK")'
+& $python -c 'import sys, numpy, scipy, PIL, pypdf; print(sys.version)'
 if ($LASTEXITCODE -ne 0) { throw 'Bundled Python failed' }
 & ffmpeg -version
 if ($LASTEXITCODE -ne 0) { throw 'Bundled FFmpeg failed' }
