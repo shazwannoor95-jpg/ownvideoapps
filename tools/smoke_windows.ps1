@@ -5,11 +5,23 @@ $engine = Join-Path $base 'resources\engine\tools\video.py'
 $env:PATH = (Join-Path $base 'resources\runtime\bin') + ';' + $env:PATH
 $env:PYTHONUTF8 = '1'
 $env:PYTHONDONTWRITEBYTECODE = '1'
+Write-Host 'Close other OwnVideo Apps windows before running this check.'
 $manifest = Get-Content (Join-Path $base 'SHA256SUMS.json') -Raw | ConvertFrom-Json
 foreach ($entry in $manifest.PSObject.Properties) {
     $actual = (Get-FileHash (Join-Path $base $entry.Name) -Algorithm SHA256).Hash.ToLowerInvariant()
     if ($actual -ne $entry.Value) { throw "SHA256 mismatch: $($entry.Name)" }
 }
+$report = Join-Path $base 'Data\portable-smoke.json'
+if (Test-Path $report) { Remove-Item $report }
+$app = Start-Process -FilePath (Join-Path $base 'OwnVideoApps.exe') -ArgumentList '--portable-smoke' -PassThru
+if (-not $app.WaitForExit(60000)) {
+    Stop-Process -Id $app.Id -Force
+    throw 'Packaged EXE startup timed out'
+}
+if (-not (Test-Path $report)) { throw 'Packaged EXE did not produce a dashboard smoke report' }
+$dashboard = Get-Content $report -Raw | ConvertFrom-Json
+if (-not $dashboard.passed -or -not $dashboard.packaged) { throw 'Packaged dashboard check failed' }
+Remove-Item $report
 & $python -c 'import sys, numpy, scipy, PIL, pypdf; print(sys.version); print("PYTHON_PACKAGES_OK")'
 if ($LASTEXITCODE -ne 0) { throw 'Bundled Python failed' }
 & ffmpeg -version

@@ -24,7 +24,8 @@ Binaan awal 0.2.0, 15 November 2026.
 ## Ujian Windows
 
 Workflow `Windows portable` pada `main` menjalankan ujian Node serta skrip
-`Semak-Portable.ps1` terhadap Python, FFmpeg, FFprobe dan render MP4 menggunakan
+`Semak-Portable.ps1` terhadap pembukaan EXE sebenar, pengasingan Node dashboard,
+Python, FFmpeg, FFprobe dan render MP4 menggunakan
 komponen yang dibundel. Lihat keputusan run GitHub Actions untuk status sebenar;
 binaan ZIP pada Linux sahaja tidak bermakna EXE telah dijalankan pada Windows.
 

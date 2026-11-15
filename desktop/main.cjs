@@ -49,5 +49,11 @@ app.whenReady().then(async()=>{
  });
  control.on('closed',()=>{job?.abort();browser.dispose();app.quit();});
  await control.loadURL(dashboard);
+ if(process.argv.includes('--portable-smoke')){
+  const checks=await control.webContents.executeJavaScript('({create:typeof window.ludo.create,render:typeof window.ludo.render,isolated:typeof require==="undefined",generationDisabled:document.getElementById("generate").disabled})');
+  if(checks.create!=='function'||checks.render!=='function'||!checks.isolated||!checks.generationDisabled)throw Error('Dashboard smoke check failed.');
+  fs.writeFileSync(path.join(config.data,'portable-smoke.json'),JSON.stringify({passed:true,packaged:app.isPackaged,checks},null,2));
+  browser.dispose();app.exit(0);
+ }
 }).catch(()=>{console.error('Aplikasi gagal bermula. Semak paparan desktop dan dependency sistem.');app.exit(1);});
 app.on('window-all-closed',()=>{if(!process.argv.includes('--fixture-audit')&&!process.argv.includes('--live-audit'))app.quit();});
