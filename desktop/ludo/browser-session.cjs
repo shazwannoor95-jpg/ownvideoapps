@@ -1,5 +1,10 @@
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),crypto=require('node:crypto');
 const URL_AI='https://aistudio.google.com/';
+async function loadPage(win,url,timeout=12000){
+ let timer;
+ try{return await Promise.race([win.loadURL(url),new Promise((_,reject)=>{timer=setTimeout(()=>{win.webContents.stop();reject(Error('Halaman Google mengambil terlalu lama. Cuba buka dalam Chrome/Edge melalui butang pelayar biasa.'));},timeout);})]);}
+ finally{clearTimeout(timer);}
+}
 const {SpeechDriver}=require('./speech-driver.cjs');
 function permitted(raw){try{const u=new URL(raw);return u.protocol==='https:'&&!u.username&&!u.password&&!u.port&&['aistudio.google.com','accounts.google.com'].includes(u.hostname);}catch{return false;}}
 const editorScript=`(()=>{const visible=e=>!!e.getClientRects().length&&!e.disabled&&!e.readOnly;const nodes=[...document.querySelectorAll('textarea,[contenteditable="true"][role="textbox"],rich-textarea [contenteditable="true"]')].filter(visible);return nodes;})()`;
@@ -21,9 +26,9 @@ class BrowserSession{
   const guard=(event,url)=>{if(!permitted(url))event.preventDefault();};win.webContents.on('will-navigate',guard);win.webContents.on('will-redirect',guard);
   win.webContents.setWindowOpenHandler(({url})=>{if(permitted(url))win.loadURL(url).catch(()=>{this.error='Halaman gagal dimuatkan. Cuba browser sistem.';});return {action:'deny'};});
   win.on('closed',()=>{if(this.window===win)this.window=null;});
-  try{await win.loadURL(URL_AI);}catch{this.error='Halaman gagal dimuatkan. Cuba browser sistem.';}return this.state();
+  try{await loadPage(win,URL_AI);}catch(e){this.error=e.message;}return this.state();
  }
- async speech(){await this.open();await this.window.loadURL('https://aistudio.google.com/generate-speech');return this.probe();}
+ async speech(){await this.open();if(this.error)throw Error(this.error);const url=new URL(this.window.webContents.getURL());if(url.hostname==='accounts.google.com')return this.probe();await loadPage(this.window,'https://aistudio.google.com/generate-speech');return this.probe();}
  // Voice-over automatik (selepas pengguna meluluskan skrip dalam aplikasi). Login Google tetap dilakukan pengguna sendiri.
  onSpeechPage(){try{const u=new URL(this.window.webContents.getURL());return permitted(u.href)&&u.hostname==='aistudio.google.com'&&u.pathname.startsWith('/generate-speech');}catch{return false;}}
  speechDriver(){
@@ -38,7 +43,7 @@ class BrowserSession{
   let u;const host=()=>{try{u=new URL(this.window.webContents.getURL());}catch{u=null;}return u?.hostname;};
   const login={ready:false,message:'Login Google AI Studio dahulu dalam tetingkap yang dibuka, kemudian tekan Luluskan semula.'};
   if(host()!=='aistudio.google.com')return login;
-  if(!this.onSpeechPage()){try{await this.window.loadURL(URL_AI+'generate-speech');}catch{}if(host()!=='aistudio.google.com')return login;if(!this.onSpeechPage())return {ready:false,message:'Halaman Generate Speech tidak dapat dibuka. Cuba semula atau import WAV sendiri.'};}
+  if(!this.onSpeechPage()){try{await loadPage(this.window,URL_AI+'generate-speech');}catch(e){return {ready:false,message:e.message};}if(host()!=='aistudio.google.com')return login;if(!this.onSpeechPage())return {ready:false,message:'Halaman Generate Speech tidak dapat dibuka. Cuba semula atau import WAV sendiri.'};}
   let state={ready:false};for(let i=0;i<20&&!state.ready;i++){state=await this.speechDriver().ready().catch(()=>({ready:false}));if(!state.ready)await new Promise(r=>setTimeout(r,500));}
   if(!state.ready)return {ready:false,message:'Halaman Generate Speech dibuka tetapi ruang "Speech block text" atau butang Run tidak dikesan. Pastikan satu blok teks (mod satu pembicara) dipaparkan, kemudian cuba lagi. Anda juga boleh import WAV sendiri.'};
   return {ready:true};
@@ -73,4 +78,4 @@ class BrowserSession{
  close(){this.window?.close();return this.state();}
  async external(){await this.shell.openExternal(URL_AI);return {opened:true};}
 }
-module.exports={BrowserSession,permitted,URL_AI};
+module.exports={BrowserSession,permitted,URL_AI,loadPage};

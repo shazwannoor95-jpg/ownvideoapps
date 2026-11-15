@@ -69,7 +69,7 @@ def build(cache,out):
  for name in ['main.cjs','preload.cjs','portable.cjs','index.html','ui.js','style.css']:
   shutil.copy2(ROOT/'desktop'/name,app/name)
  shutil.copytree(ROOT/'desktop/ludo',app/'ludo')
- (app/'package.json').write_text(json.dumps({'name':'ownvideoapps','version':'0.2.0','main':'main.cjs','private':True}),encoding='utf8')
+ (app/'package.json').write_text(json.dumps({'name':'ownvideoapps','version':'0.2.1','main':'main.cjs','private':True}),encoding='utf8')
  engine=stage/'resources/engine/tools';engine.mkdir(parents=True)
  for name in ['video.py','portable_source.py']:shutil.copy2(ROOT/'tools'/name,engine/name)
  shutil.copytree(ROOT/'tools/template',engine/'template',ignore=shutil.ignore_patterns('__pycache__','*.pyc'))

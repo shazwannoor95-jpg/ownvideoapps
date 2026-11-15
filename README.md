@@ -18,12 +18,14 @@ setempat yang dibundel. Pakej awal belum mempunyai tandatangan kod Windows.
 
 - Import TXT/MD, PDF berteks, DOCX dan PPTX menjadi draf babak.
 - Sunting tajuk, isi visual dan narasi setiap babak.
-- Penjanaan WAV Ludo melalui Google AI Studio dengan kelulusan pengguna;
-  import WAV manual melalui folder projek jika Google menolak login aplikasi.
+- Buka AI Studio melalui pelayar biasa dan import WAV Ludo terus pada babak.
+  Tetingkap automasi aplikasi kekal pilihan jika login Google membenarkannya.
 - Dengar WAV dan sunting cap masa sari kata secara manual.
 - Render MP4 H.264/AAC 720p dengan muzik instrumental, SRT dan trek sari kata.
 - Versi projek setempat mengikut tajuk; tiada Git atau upload dalam aliran app.
 
+Skill Markdown daripada repo sumber tidak dijalankan sebagai agent. Versi ini
+menggunakan kod Electron/Python/renderer; orkestrasi agent AI belum disediakan.
 PDF imbasan belum di-OCR, tiada penjajaran sari kata automatik, dan draf import
 bukan ringkasan AI. Templat visual asal mengandungi jenama UiTM. Semak fakta,
 jenama, sebutan dan sari kata sebelum berkongsi hasil.

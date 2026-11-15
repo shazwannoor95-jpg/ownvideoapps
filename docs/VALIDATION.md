@@ -1,10 +1,11 @@
 # Status pengujian
 
-Binaan awal 0.2.0, 15 November 2026.
+Binaan 0.2.1, 15 November 2026.
 
 ## Disahkan pada hos Linux
 
-- 15 ujian Node lulus: WAV, cache, penolakan narasi yang berubah selepas ada
+- 18 ujian Node lulus: had masa halaman Google, pemeliharaan halaman login,
+  import WAV tanpa menimpa audio, cache, penolakan narasi yang berubah selepas ada
   audio, ID babak, cap masa, folder projek dan panggilan Python daripada desktop.
 - 9 ujian Python lulus: ekstrak DOCX/PPTX, urutan slaid, projek/versi tanpa Git,
   penolakan path repo asal sebelum pembacaan, sekatan publish, dan render sebenar.
@@ -22,6 +23,10 @@ Binaan awal 0.2.0, 15 November 2026.
   tidak dihubungi oleh ujian ini.
 
 ## Ujian Windows
+
+Semakan EXE kini juga memanggil IPC import bahan dengan tajuk kosong, import WAV,
+penolakan WAV pendua, dan pembukaan pelayar biasa melalui shell mock. Pemilih
+fail dan pelayar distub untuk CI; ini tidak membuktikan login Google berjaya.
 
 Workflow `Windows portable` pada `main` menjalankan ujian Node serta skrip
 `Semak-Portable.ps1` terhadap pembukaan EXE sebenar, pengasingan Node dashboard,

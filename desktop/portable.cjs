@@ -62,4 +62,17 @@ function saveCues(project,id,cues){
  if(fs.existsSync(file)&&fs.lstatSync(file).isSymbolicLink())throw Error('Fail symlink tidak dibenarkan.');
  fs.writeFileSync(file,JSON.stringify(cues,null,2)+'\n');
 }
-module.exports={inside,layout,runEngine,saveSceneEdits,saveCues};
+function importWav(project,id,source,ffmpeg){
+ if(!project.scenes.some(s=>s.id===id))throw Error('Babak tidak dikenali.');
+ const real=fs.realpathSync(source);
+ if(real==='/workspace/ownvideo'||real.startsWith('/workspace/ownvideo/'))throw Error('Repo asal dilindungi.');
+ if(fs.statSync(real).size>50*1024*1024)throw Error('WAV melebihi had 50 MiB.');
+ const {normalizeWav,wavInfo}=require('./ludo/voiceover.cjs');
+ const {audioDir}=require('./ludo/project.cjs');
+ const dest=path.join(audioDir(project),id+'.wav');
+ if(fs.existsSync(dest))throw Error('WAV sedia ada dikekalkan. Cipta versi baharu untuk menggantikannya.');
+ const audio=normalizeWav(fs.readFileSync(real),ffmpeg);
+ if(wavInfo(audio).duration<.5)throw Error('WAV terlalu pendek.');
+ fs.writeFileSync(dest,audio,{flag:'wx'});
+}
+module.exports={inside,layout,runEngine,saveSceneEdits,saveCues,importWav};

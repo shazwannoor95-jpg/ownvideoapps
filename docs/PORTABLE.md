@@ -10,10 +10,13 @@ dan penjanaan Google yang sebenar dinyatakan berasingan dalam laporan ujian.
    ekstrak disimpan dalam `Data/videos/<tajuk>/v001/source/`.
 4. Semak draf babak dan simpan suntingan. Ini penyusunan teks secara automatik,
    bukan model AI yang meringkaskan atau menyemak fakta.
-5. Buka Google AI Studio dan login sendiri. Semak editor, kemudian luluskan
-   penjanaan Ludo. Memerlukan internet, akses model dan kuota akaun Google.
-   Jika Google menolak embedded browser, gunakan AI Studio dalam pelayar biasa
-   dan salin WAV Ludo ke `audio/s01.wav`, `s02.wav` dan seterusnya.
+5. Tekan **Buka AI Studio dalam pelayar biasa** untuk login melalui Chrome/Edge.
+   Pilih suara Ludo, jana narasi dan muat turun WAV. Pada setiap babak, kembangkan
+   **Audio & cap masa sari kata**, tekan **Import WAV** dan pilih rakaman babak itu.
+   Memerlukan internet, akses model dan kuota akaun Google. Login pelayar biasa
+   tidak berkongsi sesi dengan tetingkap automasi aplikasi. Automasi melalui
+   tetingkap aplikasi masih pilihan; Google boleh menolak browser itu. Jika login
+   tersangkut selepas password, tutup tetingkap automasi dan guna pelayar biasa.
 6. Muat semula babak, dengar WAV dan isi cap masa sebenar sari kata pada setiap
    babak. Masa `start`/`end` dalam saat relatif kepada WAV babak. Jangan teka
    masa jika rakaman belum disemak. Contoh format:
@@ -28,6 +31,14 @@ dan penjanaan Google yang sebenar dinyatakan berasingan dalam laporan ujian.
 8. Semak fakta, visual, sebutan dan masa sari kata dalam hasil akhir.
 
 ## Data portable
+
+Tajuk import kini pilihan: jika kosong, nama fail digunakan. Pemilih fail akan
+dibuka tanpa perlu mengisi tajuk. Pembukaan halaman Google tidak lagi mengunci
+butang import. Navigasi Google dalam tetingkap automasi mempunyai had masa.
+
+Untuk kemas kini aplikasi, tutup aplikasi lama, ekstrak binaan baharu ke folder
+baharu dan salin folder `Data` lama ke sebelah EXE baharu. Simpan salinan sandaran
+Data. Jangan buang projek atau WAV lama untuk membaiki login.
 
 Projek dan profil login aplikasi berada dalam `Data/` di sebelah EXE. Pindahkan
 seluruh folder aplikasi untuk membawa projek. Profil Google disulitkan oleh
@@ -55,6 +66,13 @@ Skrip menguji runtime Windows yang dibundel dan render satu video ujian
 menggunakan nada sintetik. Ia tidak login Google atau menjana suara sebenar.
 
 ## Bina semula
+
+Aplikasi ini tidak menjalankan skill Markdown sebagai agent AI. Electron
+menyediakan antaramuka dan dialog, Python mengekstrak dokumen serta menyusun
+draf babak, renderer dan FFmpeg menghasilkan video. Fail skill dalam repo sumber
+ialah panduan untuk agent; menyimpan fail tersebut sahaja tidak melaksanakan
+arahan, menjana skrip AI, menyemak fakta atau menjajarkan sari kata. Versi ini
+belum mengandungi agent AI yang mengorkestrasi keseluruhan workflow skill.
 
 Dari kod sumber, Python 3.12+ dan pip pada mesin pembina diperlukan:
 

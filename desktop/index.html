@@ -4,16 +4,16 @@
 <title>OwnVideo Apps — Portable</title><link rel="stylesheet" href="style.css"></head>
 <body><main>
 <header><span class="badge">WINDOWS PORTABLE</span><h1>OwnVideo Apps</h1><p>Dari bahan anda ke video Bahasa Melayu dengan narasi Ludo.</p></header>
-<section class="panel"><h2>1. Sediakan projek</h2><label for="title">Tajuk video</label>
+<section class="panel"><h2>1. Sediakan projek</h2><label for="title">Tajuk video (pilihan; jika kosong guna nama fail)</label>
 <div class="row"><input id="title" maxlength="200" placeholder="Contoh: Panduan Pengurusan Rekod"><button id="create">Import bahan &amp; cipta projek</button></div>
 <p class="hint">TXT, Markdown, PDF berteks, DOCX atau PPTX. Teks disusun menjadi draf babak; semak dan sunting sebelum menjana suara. PDF imbasan memerlukan OCR dahulu.</p>
 <div class="row"><button id="choose">Buka projek sedia ada</button><button id="folder">Buka folder projek / Data</button></div></section>
 <section class="panel"><h2>2. Semak storyboard</h2><h3 id="project">Belum ada projek dipilih</h3><p id="location" class="hint"></p>
 <section id="scripts"></section><button id="save" disabled>Simpan suntingan</button></section>
-<section class="panel"><h2>3. Jana narasi Ludo</h2><p>Log masuk Google sendiri dalam tetingkap AI Studio. Penjanaan memerlukan internet dan kuota Google.</p>
-<div class="row"><button id="open">Buka / login Google AI Studio</button><button id="check">Semak editor</button>
+<section class="panel"><h2>3. Jana narasi Ludo</h2><p>Buka AI Studio dalam Chrome/Edge, login sendiri dan pilih suara Ludo. Selepas muat turun WAV, guna Import WAV pada setiap babak.</p>
+<div class="row"><button id="open">Buka AI Studio dalam pelayar biasa</button><button id="embedded">Buka tetingkap automasi aplikasi (pilihan)</button><button id="check">Semak editor</button>
 <button id="generate" disabled>Luluskan skrip &amp; jana WAV Ludo</button><button id="cancel">Hentikan penjanaan Ludo</button></div>
-<p class="hint">Simpan suntingan dahulu. Hanya narasi dihantar selepas kelulusan. WAV sedia ada tidak ditimpa. Jika login aplikasi disekat Google, jana WAV dalam pelayar biasa dan letakkan dalam audio/sXX.wav.</p></section>
+<p class="hint">Simpan suntingan dahulu. Hanya narasi dihantar selepas kelulusan. WAV sedia ada tidak ditimpa. Login pelayar biasa tidak berkongsi sesi dengan tetingkap automasi aplikasi. Jika Google menolak tetingkap aplikasi, jana Ludo dalam pelayar biasa dan gunakan Import WAV pada babak.</p></section>
 <section class="panel"><h2>4. Eksport video</h2><p>Dengar setiap WAV dan isi cap masa sari kata sebenar pada babak di atas. Tekan Muat semula selepas menjana atau memasukkan WAV secara manual.</p>
 <div class="row"><button id="reload" disabled>Muat semula babak</button><button id="render" class="primary" disabled>Render MP4 + sari kata</button></div>
 <p class="hint">Output H.264/AAC 720p, muzik instrumental dan SRT. Semakan teknikal tidak menggantikan semakan fakta, sebutan atau kelulusan manusia.</p></section>

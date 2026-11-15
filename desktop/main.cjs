@@ -1,7 +1,7 @@
 const {app,BrowserWindow,session,shell,ipcMain,dialog}=require('electron');
 const path=require('node:path'),fs=require('node:fs'),{pathToFileURL}=require('node:url');
 const {BrowserSession}=require('./ludo/browser-session.cjs');const {loadProject,generate}=require('./ludo/project.cjs');
-const {inside,layout,runEngine,saveSceneEdits,saveCues}=require('./portable.cjs');
+const {inside,layout,runEngine,saveSceneEdits,saveCues,importWav}=require('./portable.cjs');
 const config=layout(app);
 const profile=process.env.OWNVIDEO_LUDO_PROFILE||config.profile;
 fs.mkdirSync(profile,{recursive:true});
@@ -26,17 +26,20 @@ app.whenReady().then(async()=>{
  bind('choose',async()=>{if(job)throw Error('Proses sedang berjalan.');const r=await dialog.showOpenDialog(control,{title:'Pilih storyboard.json dalam Data/videos',defaultPath:path.join(config.data,'videos'),filters:[{name:'Storyboard JSON',extensions:['json']}],properties:['openFile']});if(r.canceled)return null;if(path.basename(r.filePaths[0])!=='storyboard.json')throw Error('Pilih fail storyboard.json.');const root=inside(path.join(config.data,'videos'),path.dirname(r.filePaths[0]));selected=loadProject(root);return details(selected);});
  bind('create',async payload=>{
   if(job)throw Error('Proses sedang berjalan.');
-  if(typeof payload?.title!=='string'||!payload.title.trim()||payload.title.length>200)throw Error('Isi tajuk video (maksimum 200 aksara).');
+  if(typeof payload?.title!=='string'||payload.title.length>200)throw Error('Tajuk maksimum 200 aksara.');
   const r=await dialog.showOpenDialog(control,{title:'Import bahan video',filters:[{name:'Dokumen',extensions:['txt','md','pdf','docx','pptx']}],properties:['openFile']});if(r.canceled)return null;
-  job=new AbortController();try{const result=await runEngine(config,['new',payload.title,'--source',r.filePaths[0]],{onLog:progress});inside(path.join(config.data,'videos'),result.project);selected=loadProject(result.project);return details(selected);}finally{job=null;}
+  const title=payload.title.trim()||path.basename(r.filePaths[0],path.extname(r.filePaths[0]));
+  job=new AbortController();try{const result=await runEngine(config,['new',title,'--source',r.filePaths[0]],{onLog:progress});inside(path.join(config.data,'videos'),result.project);selected=loadProject(result.project);return details(selected);}finally{job=null;}
  });
+ bind('external',async()=>{await browser.external();return {message:'AI Studio dibuka dalam pelayar biasa. Login di sana, pilih Ludo dan muat turun WAV. Kemudian guna Import WAV pada babak. Login pelayar biasa tidak log masuk tetingkap automasi aplikasi.'};});
+ bind('importWav',async payload=>{if(job)throw Error('Proses sedang berjalan.');const p=current();if(!p.scenes.some(s=>s.id===payload?.id))throw Error('Babak tidak dikenali.');const r=await dialog.showOpenDialog(control,{title:'Import WAV Ludo untuk '+payload.id,filters:[{name:'Audio WAV',extensions:['wav']}],properties:['openFile']});if(r.canceled)return null;importWav(p,payload.id,r.filePaths[0],config.ffmpeg);selected=loadProject(p.root);return details(selected);});
  bind('save',payload=>{if(job)throw Error('Proses sedang berjalan.');const p=current();saveSceneEdits(p,payload);selected=loadProject(p.root);return details(selected);});
  bind('refresh',()=>{if(job)throw Error('Proses sedang berjalan.');selected=current();return details(selected);});
  bind('cues',payload=>{if(job)throw Error('Proses sedang berjalan.');saveCues(current(),payload?.id,payload?.cues);return {message:'Cap masa sari kata disimpan.'};});
  bind('audio',async payload=>{const p=current();if(!p.scenes.some(s=>s.id===payload?.id))throw Error('Babak tidak dikenali.');const file=path.join(p.root,'audio',payload.id+'.wav');inside(p.root,file);const error=await shell.openPath(file);if(error)throw Error(error);return {message:'WAV dibuka dalam pemain audio.'};});
  bind('folder',async()=>{const error=await shell.openPath(selected?current().root:config.data);if(error)throw Error(error);return {message:'Folder setempat dibuka.'};});
  bind('render',async()=>{if(job)throw Error('Proses sedang berjalan.');const p=current();job=new AbortController();try{await runEngine(config,['render',p.root,'--workers','2'],{onLog:progress});return {message:'MP4 dan SRT siap dalam folder outputs. Semak kandungan dan sebutan sebelum berkongsi.'};}finally{job=null;}});
- bind('open',async()=>{if(job)throw Error('Tunggu penjanaan selesai.');await browser.speech();return {message:'Tetingkap dibuka. Login sendiri; pembukaan sahaja tidak mengesahkan login.'};});
+ bind('open',async()=>{if(job)throw Error('Tunggu penjanaan selesai.');const state=await browser.speech();return {message:state.connection==='LOGIN_REQUIRED'?'Login sendiri dalam tetingkap aplikasi. Jika Google menolak browser aplikasi, gunakan pelayar biasa dan Import WAV.':'Tetingkap dibuka. Login/pilihan Ludo belum disahkan.'};});
  bind('check',async()=>{if(job)throw Error('Penjanaan sedang berjalan.');const r=await browser.prepareSpeech();return {ready:r.ready,message:r.ready?'Editor pertuturan dikesan. Pilihan Ludo akan disemak semasa penjanaan.':r.message};});
  bind('cancel',()=>{job?.abort();return {message:'Permintaan berhenti diterima.'};});
  bind('generate',async()=>{
@@ -52,6 +55,31 @@ app.whenReady().then(async()=>{
  if(process.argv.includes('--portable-smoke')){
   const checks=await control.webContents.executeJavaScript('({create:typeof window.ludo.create,render:typeof window.ludo.render,isolated:typeof require==="undefined",generationDisabled:document.getElementById("generate").disabled})');
   if(checks.create!=='function'||checks.render!=='function'||!checks.isolated||!checks.generationDisabled)throw Error('Dashboard smoke check failed.');
+  const source=path.join(config.data,'Portable import semakan '+Date.now()+'.txt');
+  const wav=source+'.wav';const originalDialog=dialog.showOpenDialog,originalExternal=shell.openExternal;
+  try{
+   fs.writeFileSync(source,'# Semakan\nIni bahan ujian import setempat.');
+   dialog.showOpenDialog=async()=>({canceled:false,filePaths:[source]});
+   const imported=await control.webContents.executeJavaScript('window.ludo.create("")');
+   if(imported?.error||!imported?.scenes?.length)throw Error('Import IPC failed: '+JSON.stringify(imported));
+   checks.importWithoutTitle=true;
+   const {canonical}=require('./ludo/voiceover.cjs');fs.writeFileSync(wav,canonical(Buffer.alloc(48000)));
+   dialog.showOpenDialog=async()=>({canceled:false,filePaths:[wav]});
+   const audio=await control.webContents.executeJavaScript('window.ludo.importWav("s01")');
+   if(audio?.error||!audio?.scenes?.[0]?.hasAudio)throw Error('WAV IPC failed: '+JSON.stringify(audio));
+   checks.importWav=true;
+   const duplicate=await control.webContents.executeJavaScript('window.ludo.importWav("s01")');
+   if(!duplicate?.error?.includes('dikekalkan'))throw Error('Existing WAV was not protected.');
+   checks.existingWavProtected=true;
+   let externalUrl;shell.openExternal=async url=>{externalUrl=url;};
+   const external=await control.webContents.executeJavaScript('window.ludo.external()');
+   if(external?.error||externalUrl!=='https://aistudio.google.com/')throw Error('External browser IPC failed.');
+   checks.externalBrowser=true;
+  }finally{
+   dialog.showOpenDialog=originalDialog;shell.openExternal=originalExternal;
+   fs.rmSync(source,{force:true});fs.rmSync(wav,{force:true});
+   if(selected){fs.rmSync(path.dirname(inside(path.join(config.data,'videos'),selected.root)),{recursive:true,force:true});selected=null;}
+  }
   fs.writeFileSync(path.join(config.data,'portable-smoke.json'),JSON.stringify({passed:true,packaged:app.isPackaged,checks},null,2));
   browser.dispose();app.exit(0);
  }
